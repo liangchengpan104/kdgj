@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>平安口袋管家 · 灵活适配每一种管理深度</title>
+<style>
+  :root{--pa-orange:#FF6A00;--pa-orange-deep:#F04E00;--pa-orange-soft:#FFF3EA;--ink:#1A1A1A;--ink-2:#5A5A5A;--ink-3:#999999;--line:#EEEEEE}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;background:#fff;color:var(--ink);max-width:480px;margin:0 auto}
+  .hero{padding:44px 20px 30px;background:linear-gradient(180deg,#FFF8F2 0%,#FFFFFF 100%);text-align:center}
+  .hero .brand{font-size:13px;letter-spacing:2px;color:var(--pa-orange);font-weight:600;margin-bottom:14px}
+  .hero h1{font-size:26px;line-height:1.35;font-weight:700}
+  .hero h1 em{font-style:normal;color:var(--pa-orange)}
+  .hero p{margin-top:12px;font-size:14px;color:var(--ink-2);line-height:1.7}
+  .depth{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-top:28px}
+  .dcell{text-align:center;width:88px}
+  .dbox{border-radius:12px 12px 0 0;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;padding:10px 8px 0}
+  .dcell b{font-size:15px;font-weight:800;display:block}
+  .dcell span{font-size:10px;color:var(--ink-3)}
+  .darr{color:#E8CBB5;font-size:22px;padding-bottom:38px}
+  .b1{height:44px;width:64px;background:linear-gradient(180deg,#FFDCC2,#FFBE94)}
+  .b1 .ln{width:75%;height:5px;border-radius:3px;background:#fff}
+  .b2{height:60px;width:76px;background:linear-gradient(180deg,#FFB377,#FF8A3D);display:grid;grid-template-columns:1fr 1fr;gap:5px;align-content:center}
+  .b2 i{height:12px;border-radius:4px;background:rgba(255,255,255,.85)}
+  .b3{height:80px;width:88px;background:linear-gradient(180deg,#FF7A1A,#F04E00);display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;align-content:start}
+  .b3 i{height:9px;border-radius:3px;background:rgba(255,255,255,.8)}
+  .b3 svg{grid-column:1/4;align-self:end;margin-top:2px}
+  section{padding:38px 18px 12px}
+  .nav{position:sticky;top:0;z-index:50;display:flex;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav button{flex:1;padding:16px 0;font-size:17px;font-weight:800;color:#BBBBBB;background:none;border:none;border-bottom:3px solid transparent;letter-spacing:.5px}
+  .nav button.on{color:var(--pa-orange);border-bottom-color:var(--pa-orange)}
+  .lv-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--pa-orange);background:var(--pa-orange-soft);padding:5px 12px;border-radius:20px}
+  .lv-banner{border-radius:16px;padding:22px 20px;color:#fff;margin-bottom:12px;box-shadow:0 8px 20px rgba(240,78,0,.2)}
+  .lv-banner .lb-kick{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.24);border-radius:8px;padding:5px 12px;margin-bottom:12px}
+  .lv-banner h2{font-size:25px;font-weight:800;line-height:1.38}
+  .t1{background:linear-gradient(135deg,#FFA25C,#FF7A1A)}
+  .t2{background:linear-gradient(135deg,#FF7A1A,#F04E00)}
+  .t3{background:linear-gradient(135deg,#F0560A,#D63F00)}
+  .ind-tabs{display:flex;gap:8px;margin:26px 0 14px}
+  .ind-tabs button{flex:1;padding:11px 0;font-size:13.5px;font-weight:700;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink-2)}
+  .ind-tabs button.on{background:var(--pa-orange);border-color:var(--pa-orange);color:#fff;box-shadow:0 4px 10px rgba(255,106,0,.3)}
+  .ind-panel{display:none;border:1px solid var(--line);border-radius:14px;padding:18px;animation:fade .3s}
+  .ind-panel.on{display:block}
+  .ind-panel h5{font-size:14px;margin-bottom:10px}
+  .ind-panel .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .ind-panel .chips span{font-size:12px;background:#F6F6F6;border-radius:6px;padding:6px 10px;color:var(--ink-2)}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .lv-title{font-size:22px;font-weight:700;margin:14px 0 6px}
+  .lv-sub{font-size:14px;color:var(--ink-2);line-height:1.7;margin-bottom:24px}
+  .steps{background:#FAFAFA;border:1px solid var(--line);border-radius:16px;padding:26px 20px}
+  .step{display:flex;align-items:center;gap:14px}
+  .step .ic{width:46px;height:46px;border-radius:12px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--pa-orange);flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .step .tx b{display:block;font-size:15px}
+  .step .tx span{font-size:12px;color:var(--ink-3)}
+  .step-line{width:2px;height:22px;background:var(--pa-orange);margin-left:22px;opacity:.35;border-radius:2px}
+  .mini-label{font-size:13px;font-weight:700;color:var(--ink-2);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  .mini-label:after{content:"";flex:1;height:1px;background:var(--line)}
+  .mini{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;background:#fff}
+  .mini .mh{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .mini .mh .mi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+  .mini .mh b{font-size:15px;display:block}
+  .mini .mh span{font-size:11px;color:var(--ink-3)}
+  .mini .msteps{display:flex;align-items:flex-start}
+  .mini .ms{flex:1;text-align:center;position:relative}
+  .mini .ms i{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--pa-orange-soft);color:var(--pa-orange);font-size:12px;font-weight:700;font-style:normal;margin:0 auto 6px}
+  .mini .ms p{font-size:11px;color:var(--ink-2);line-height:1.5}
+  .mini .ms:after{content:"›";position:absolute;right:-6px;top:0;color:#D8CFC7;font-size:16px}
+  .mini .ms:last-child:after{content:""}
+  .c-orange{background:linear-gradient(135deg,#FF8A3D,#FF6A00)}
+  .c-blue{background:linear-gradient(135deg,#3D7BFF,#2B6CF6)}
+  .c-green{background:linear-gradient(135deg,#2BB673,#00B578)}
+  .c-purple{background:linear-gradient(135deg,#9B6CFF,#7B4DFF)}
+  .voice{margin-top:22px;background:#FFF8F2;border-left:3px solid var(--pa-orange);border-radius:0 12px 12px 0;padding:16px 18px}
+  .voice p{font-size:14px;line-height:1.8}
+  .voice .who{margin-top:10px;font-size:12px;color:var(--ink-3)}
+  .keys{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .keys span{font-size:12px;color:var(--pa-orange-deep);background:var(--pa-orange-soft);border-radius:6px;padding:6px 12px;font-weight:600}
+  .rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px}
+  .rule-card{background:#1F2430;border-radius:14px;padding:14px;color:#fff}
+  .rule-card h5{font-size:13px;margin-bottom:11px;display:flex;align-items:center;gap:6px}
+  .rule-card h5 i{width:6px;height:6px;border-radius:50%;background:var(--pa-orange);flex-shrink:0}
+  .rc-row{margin-bottom:9px}
+  .rc-row .rc-lab{font-size:10px;color:#8A90A0;margin-bottom:5px}
+  .segs{display:flex;flex-wrap:wrap;gap:5px}
+  .segs span{font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.08);color:#C6CAD4}
+  .segs span.on{background:rgba(255,106,0,.22);color:#FFA25C;border:1px solid rgba(255,106,0,.5)}
+  .rc-chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:10px;color:#C6CAD4}
+  .rc-chain b{background:rgba(255,255,255,.1);padding:3px 8px;border-radius:6px;font-weight:500}
+  .case-label{font-size:13px;font-weight:700;color:var(--ink-2);margin:2px 0 12px;display:flex;align-items:center;gap:8px}
+  .case-label:after{content:"";flex:1;height:1px;background:var(--line)}
+  .case{border:1px solid var(--line);border-radius:14px;padding:18px;animation:fade .3s}
+  .case .c-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .case .c-top b{font-size:16px}
+  .case .c-top span{font-size:11px;color:var(--ink-3)}
+  .case .c-need{font-size:12.5px;color:var(--ink-2);margin-bottom:14px;padding:8px 12px;background:#FFF8F2;border-radius:8px;line-height:1.6}
+  .case .c-row{margin-bottom:11px}
+  .case .c-row em{font-style:normal;font-size:11px;font-weight:700;color:var(--pa-orange-deep);display:block;margin-bottom:6px}
+  .case .c-row .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .case .c-row .chips span{font-size:11px;background:#F6F6F6;border-radius:6px;padding:5px 9px;color:var(--ink-2)}
+  .case .c-res{margin-top:12px;font-size:12px;color:var(--green);font-weight:700}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .vs .card{border-radius:14px;padding:18px 14px}
+  .vs .before{background:#F7F7F7;border:1px dashed #DDD}
+  .vs .after{background:linear-gradient(160deg,#FFF3EA,#FFE8D6);border:1px solid #FFD9BE}
+  .vs h4{font-size:13px;margin-bottom:12px}
+  .vs .before h4{color:var(--ink-3)}
+  .vs .after h4{color:var(--pa-orange-deep)}
+  .vs ul{list-style:none}
+  .vs li{font-size:12.5px;line-height:1.6;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05);color:var(--ink-2)}
+  .vs li:last-child{border:none}
+  .vs .after li{color:var(--ink);font-weight:500}
+  .ind-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .ind-chips span{font-size:12px;background:#F6F6F6;border-radius:6px;padding:6px 10px;color:var(--ink-2)}
+  .ind-title{font-size:14px;margin:20px 0 10px;font-weight:700}
+  .dash{background:#1F2430;border-radius:16px;padding:20px 16px;color:#fff}
+  .dash .dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .dash .dh b{font-size:13px}
+  .dash .dh span{font-size:10px;color:#8A90A0;background:rgba(255,255,255,.08);padding:3px 8px;border-radius:10px}
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .metric{background:rgba(255,255,255,.06);border-radius:12px;padding:12px}
+  .metric .lab{font-size:11px;color:#9AA0B0;margin-bottom:6px}
+  .metric .val{font-size:20px;font-weight:700}
+  .metric .val small{font-size:11px;font-weight:400;color:#9AA0B0}
+  .metric .up{font-size:10px;color:#3DDC97;margin-top:4px}
+  .spark{margin-top:12px;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px 4px}
+  .flow{margin-top:20px}
+  .flow h5{font-size:13px;color:var(--ink-2);margin-bottom:14px}
+  .flow-track{display:flex;flex-wrap:wrap}
+  .node>div{text-align:center;width:52px}
+  .node .dot{width:34px;height:34px;border-radius:50%;background:var(--pa-orange-soft);border:1.5px solid var(--pa-orange);color:var(--pa-orange);display:flex;align-items:center;justify-content:center;margin:0 auto}
+  .node p{font-size:11px;text-align:center;margin-top:5px;color:var(--ink-2)}
+  .link{width:16px;height:2px;background:linear-gradient(90deg,var(--pa-orange),#FFD0AC);margin:0 1px 16px}
+  .support{background:linear-gradient(180deg,#FFF8F2 0%,#FFF 100%);margin-top:36px;padding:44px 18px 8px}
+  .support h2{font-size:22px;font-weight:700}
+  .support .lead{font-size:14px;color:var(--ink-2);line-height:1.7;margin:8px 0 30px}
+  .sup-item{margin-bottom:38px}
+  .sup-no{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .sup-no .n{width:26px;height:26px;border-radius:50%;background:var(--pa-orange);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .sup-no b{font-size:16px}
+  .sup-no span{font-size:12px;color:var(--ink-3)}
+  .sup-desc{font-size:13px;color:var(--ink-2);line-height:1.75;margin-bottom:16px}
+  .pc{border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(240,78,0,.07);background:#fff}
+  .pc-top{background:#F5F6F8;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+  .pc-top i{width:9px;height:9px;border-radius:50%;background:#D8D8D8;display:block}
+  .pc-top .url{flex:1;background:#fff;border-radius:6px;font-size:10px;color:var(--ink-3);padding:4px 10px;text-align:center}
+  .pc-body{display:flex;min-height:190px}
+  .pc-side{width:56px;background:#2B3245;padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .pc-side .mi{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.14)}
+  .pc-side .mi.on{background:var(--pa-orange)}
+  .pc-main{flex:1;padding:14px}
+  .pc-block{margin-bottom:14px}
+  .pc-block .pb-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .pc-block .pb-h b{font-size:12px}
+  .pc-block .pb-h span{font-size:9.5px;color:var(--pa-orange);border:1px dashed var(--pa-orange);border-radius:8px;padding:2px 7px}
+  .pc-apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .pc-apps div{background:#FAFAFA;border:1px solid var(--line);border-radius:8px;padding:9px 2px;text-align:center;font-size:9.5px;color:var(--ink-2)}
+  .pc-apps div em{display:block;font-style:normal;width:20px;height:20px;border-radius:6px;background:var(--pa-orange-soft);color:var(--pa-orange);margin:0 auto 4px;font-size:11px;line-height:20px}
+  .pc-scene{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .pc-scene div{border-radius:8px;padding:10px 6px;font-size:9.5px;color:#fff;text-align:center;line-height:1.4}
+  .pc-scene .s1{background:linear-gradient(135deg,#FF8A3D,#FF6A00)}
+  .pc-scene .s2{background:linear-gradient(135deg,#3D7BFF,#2B6CF6)}
+  .pc-scene .s3{background:linear-gradient(135deg,#2BB673,#00B578)}
+  .pc-note{margin-top:10px;font-size:11px;color:var(--ink-3);text-align:center}
+  .layer{border-radius:14px;padding:16px 18px;margin-bottom:10px;border:1px solid var(--line)}
+  .layer .lh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .layer .lh b{font-size:14px}
+  .layer .lh i{font-style:normal;font-size:10px;font-weight:700;color:#fff;background:var(--pa-orange);border-radius:6px;padding:2px 8px}
+  .layer p{font-size:12px;color:var(--ink-2);line-height:1.7}
+  .layer .mods{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .layer .mods span{font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-2)}
+  .l1{background:linear-gradient(135deg,#FFF3EA,#FFE9D9);border-color:#FFD9BE}
+  .l2{background:linear-gradient(135deg,#FFF8F2,#FFF0E4);border-color:#FFE2CC}
+  .l3{background:#F7F8FA}
+  .l3 .lh i{background:#8A90A0}
+  .layer-arrow{text-align:center;color:var(--pa-orange);font-size:16px;line-height:1;margin:2px 0}
+  .svc-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .svc-modes div{background:var(--pa-orange-soft);border-radius:10px;padding:12px 6px;text-align:center}
+  .svc-modes b{display:block;font-size:12.5px;color:var(--pa-orange-deep);margin-bottom:4px}
+  .svc-modes span{font-size:10.5px;color:var(--ink-3);line-height:1.5;display:block}
+  .svc-label{font-size:12px;font-weight:700;color:var(--ink-2);margin:16px 0 10px}
+  .phones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .ph{border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;background:#fff}
+  .ph .scr{height:96px;border-radius:10px;margin-bottom:8px;padding:8px 6px;text-align:left}
+  .ph .scr .sk{height:8px;border-radius:4px;background:rgba(0,0,0,.08);margin-bottom:6px}
+  .ph .scr .sk.o{background:rgba(255,106,0,.55)}
+  .ph b{font-size:12px;display:block}
+  .ph span{font-size:10px;color:var(--ink-3);line-height:1.5;display:block;margin-top:3px}
+  .ph .scr.appA{background:#FFF3EA}
+  .ph .scr.appB{background:#EAF1FF}
+  .ph .scr.appC{background:linear-gradient(135deg,#2B3245,#3A4459)}
+  .quiz-sec{background:linear-gradient(180deg,#FFF8F2,#FFF);margin-top:36px;padding:40px 18px 32px}
+  .quiz-sec h2{font-size:20px;text-align:center}
+  .quiz-sec .tip{text-align:center;font-size:13px;color:var(--ink-3);margin:8px 0 24px}
+  .q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+  .q b{font-size:14px;display:block;margin-bottom:12px}
+  .opts{display:flex;gap:8px}
+  .opts button{flex:1;padding:10px 4px;font-size:12.5px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink-2)}
+  .opts button.sel{background:var(--pa-orange);border-color:var(--pa-orange);color:#fff;font-weight:600}
+  .quiz-result{margin-top:20px;border-radius:16px;padding:24px 20px;text-align:center;background:#fff;border:1.5px solid var(--pa-orange)}
+  .quiz-result .rl{font-size:12px;color:var(--ink-3)}
+  .quiz-result .rv{font-size:22px;font-weight:800;color:var(--pa-orange);margin:6px 0 8px}
+  .quiz-result p{font-size:13px;color:var(--ink-2);line-height:1.7}
+  .cta-all{display:block;text-align:center;margin:24px 18px 0;background:var(--pa-orange);color:#fff;font-weight:700;font-size:15px;padding:15px;border-radius:26px;text-decoration:none}
+  .foot{text-align:center;font-size:11px;color:var(--ink-3);padding:28px 0 40px;line-height:1.8}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="brand">平安口袋管家 · PINGAN</div>
+  <h1>一套平台，<em>灵活适配</em><br>每一种管理深度</h1>
+  <p>口袋管家功能丰富、管理一体化，但并不意味着所有企业都使用同一个套餐<br>不同企业的管理诉求千差万别——无论是几个人的小团队，还是上万人的集团，管理简单还是精细，总有一款适配您</p>
+  <div class="depth">
+    <div class="dcell"><div class="dbox b1"><div class="ln"></div></div><b>轻量化</b><span>当小工具用</span></div>
+    <div class="darr">›</div>
+    <div class="dcell"><div class="dbox b2"><i></i><i></i><i></i><i></i></div><b>差异化</b><span>按规则来配</span></div>
+    <div class="darr">›</div>
+    <div class="dcell"><div class="dbox b3"><i></i><i></i><i></i><i></i><i></i><i></i><svg viewBox="0 0 80 24" width="100%" height="22" preserveAspectRatio="none"><polyline points="0,19 16,15 32,17 48,10 64,12 80,4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><b>精细化</b><span>全模块掌控</span></div>
+  </div>
+</div>
+
+<section id="sec1">
+  <div class="lv-banner t1"><span class="lb-kick">轻量化管理 · 当小工具用</span><h2>不用专职 HR，<br>也能把人事管起来</h2></div>
+    <div class="keys"><span>无需复杂配置</span><span>即开即用</span><span>零学习成本</span></div>
+  <p class="lv-sub">无需专业管理知识与复杂的系统配置，发薪、签约、培训、入职等高频事务，均可通过标准化流程快速完成。</p>
+    <div class="mini-label" style="margin:0 0 14px">极速发薪</div>
+  <div class="steps">
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M11.36 3.36a.9.9 0 011.28 0l4.44 4.45a.9.9 0 01-1.27 1.27L12.9 6.17v8.5a.9.9 0 11-1.8 0V6.17l-2.91 2.91a.9.9 0 11-1.27-1.27l4.44-4.45zM4 13.77a.9.9 0 01.9.9v3.56c0 .23.09.45.25.62.17.16.39.25.62.25h12.45c.23 0 .45-.09.62-.25a.88.88 0 00.25-.62v-3.56a.9.9 0 111.8 0v3.56a2.7 2.7 0 01-2.7 2.7H5.78a2.7 2.7 0 01-2.7-2.7v-3.56a.9.9 0 01.9-.9z"/></svg></div><div class="tx"><b>导入工资表</b><span>Excel 一键上传，无需录入员工档案</span></div></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M16.54 10.16a.9.9 0 011.27 1.27l-2.36 2.37V17.1a.9.9 0 11-1.8 0v-3.3l-2.36 2.36a.9.9 0 11-1.27-1.27l3.9-3.9a.9.9 0 011.27 0z"/></svg></div><div class="tx"><b>一键发薪</b><span>本行跨行都能发，财务审核后自动到账</span></div></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.17 2.1c.77 0 1.51.31 2.05.85l3.83 3.83c.54.54.85 1.28.85 2.05V18a3 3 0 01-3 3H8a3 3 0 01-3-3V6a3 3 0 013-3h5.17zM8 3.9a2.1 2.1 0 00-2.1 2.1v12a2.1 2.1 0 002.1 2.1h8a2.1 2.1 0 002.1-2.1V9.9H15a2.9 2.9 0 01-2.9-2.9V3.9H8zm5.9 3.1c0 .61.49 1.1 1.1 1.1h2.82l-.04-.05-3.83-3.83-.06-.05V7zm2.24 5.16a.9.9 0 011.27 1.27l-3.44 3.44a2.41 2.41 0 01-3.4 0l-1.43-1.43a.9.9 0 111.27-1.27l1.44 1.44a.6.6 0 00.85 0l3.44-3.44z"/></svg></div><div class="tx"><b>工资单送达</b><span>员工手机实时查收，电子留痕可追溯</span></div></div>
+    <div style="margin-top:16px;padding:9px 12px;background:#fff;border:1px dashed #FFB98A;border-radius:10px;font-size:11.5px;color:#B25A12;line-height:1.6">支持秘薪管理：管理员分权限查看，员工仅可见本人工资单，薪资数据更安全</div>
+  </div>
+  <div class="mini-label">更多即开即用的事务闭环</div><div class="mini">
+    <div class="mh"><div class="mi c-purple"><svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg></div><div><b>扫码入职</b><span>候选人自助办理，HR 在线审核即完成入职</span></div></div>
+    <div class="msteps"><div class="ms"><i>1</i><p>HR 创建入职二维码</p></div><div class="ms"><i>2</i><p>员工扫码申请入职</p></div><div class="ms"><i>3</i><p>HR 审核即入职</p></div></div>
+  </div>
+  <div class="mini">
+    <div class="mh"><div class="mi c-blue"><svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.17 2.1c.77 0 1.51.31 2.05.85l3.83 3.83c.54.54.85 1.28.85 2.05V18a3 3 0 01-3 3H8a3 3 0 01-3-3V6a3 3 0 013-3h5.17zM8 3.9a2.1 2.1 0 00-2.1 2.1v12a2.1 2.1 0 002.1 2.1h8a2.1 2.1 0 002.1-2.1V9.9H15a2.9 2.9 0 01-2.9-2.9V3.9H8zm5.9 3.1c0 .61.49 1.1 1.1 1.1h2.82l-.04-.05-3.83-3.83-.06-.05V7z"/></svg></div><div><b>几分钟签合同</b><span>全程线上化，员工移动端即可完成签署</span></div></div>
+    <div class="msteps"><div class="ms"><i>1</i><p>导入花名册</p></div><div class="ms"><i>2</i><p>配置合同模板</p></div><div class="ms"><i>3</i><p>一键发起签约</p></div><div class="ms"><i>4</i><p>员工手机签署</p></div></div>
+  </div>
+  <div class="mini">
+    <div class="mh"><div class="mi c-green"><svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19"><path d="M12 4c.34 0 .66.16.85.44l8.8 9.03a.86.86 0 01.05 1.07c-.19.27-.48.4-.76.32l-8.27-2.16a.98.98 0 00-.34 0l-8.27 2.16a.79.79 0 01-.76-.32.86.86 0 01.05-1.07l8.8-9.03A1.04 1.04 0 0112 4z"/></svg></div><div><b>快速学习</b><span>3000+ 门免费课程，扫码即可全员开通</span></div></div>
+    <div class="msteps"><div class="ms"><i>1</i><p>导入花名册</p></div><div class="ms"><i>2</i><p>扫码开通免费课程</p></div><div class="ms"><i>3</i><p>全员即开即学</p></div></div>
+  </div>
+  
+  <div class="voice"><p>"我们公司就20个人，HR兼行政。签合同、发工资、办入职，现在都在手机上点点就完成，不用跑腿不用催，10分钟搞定一批。"</p><div class="who">某初创团队负责人</div></div>
+</section>
+
+<section id="sec2">
+  <div class="lv-banner t2"><span class="lb-kick">差异化管理 · 按需灵活配</span><h2>按需开通、灵活配置，<br>适配各类行业与规模</h2></div>
+    <div class="keys"><span>按需选模块</span><span>规则可配置</span><span>支持行业预置模板</span></div>
+  <p class="lv-sub">企业可按需开通功能模块，考勤、审批、薪酬的规则与参数均可自定义配置——从班次、审批链到薪酬科目，形成契合自身的管理闭环。</p>
+  <div class="rule-grid">
+    <div class="rule-card">
+      <h5><i></i>考勤规则</h5>
+      <div class="rc-row"><div class="rc-lab">班次类型</div><div class="segs"><span>固定班</span><span class="on">弹性打卡</span><span>综合工时</span></div></div>
+      <div class="rc-row"><div class="rc-lab">打卡方式</div><div class="segs"><span class="on">GPS</span><span>WiFi</span><span>考勤机对接</span></div></div>
+      <div class="rc-row" style="margin-bottom:0"><div class="rc-lab">加班规则</div><div class="segs"><span>审批后计</span><span class="on">自动累计转调休</span></div></div>
+    </div>
+    <div class="rule-card">
+      <h5><i></i>审批流</h5>
+      <div class="rc-row"><div class="rc-lab">请假</div><div class="rc-chain"><b>直属主管</b>→<b>HR</b></div></div>
+      <div class="rc-row"><div class="rc-lab">加班</div><div class="rc-chain"><b>主管一级审批</b></div></div>
+      <div class="rc-row" style="margin-bottom:0"><div class="rc-lab">离职</div><div class="rc-chain"><b>主管</b>→<b>HR</b>→<b>财务</b>＋<span style="color:#FFA25C">层级自由加</span></div></div>
+    </div>
+    <div class="rule-card">
+      <h5><i></i>薪酬科目</h5>
+      <div class="rc-row"><div class="rc-lab">科目组合（自由加减）</div><div class="segs"><span class="on">底薪</span><span class="on">绩效</span><span>计件</span><span>津贴</span></div></div>
+      <div class="rc-row" style="margin-bottom:0"><div class="rc-lab">计薪方式</div><div class="segs"><span>月薪</span><span>时薪</span><span class="on">计件</span></div></div>
+    </div>
+    <div class="rule-card">
+      <h5><i></i>假期方案</h5>
+      <div class="rc-row"><div class="rc-lab">年假按工龄阶梯</div><div class="segs"><span>1-3年 5天</span><span class="on">3-5年 10天</span><span>自定义</span></div></div>
+      <div class="rc-row" style="margin-bottom:0"><div class="rc-lab">自定义假种</div><div class="segs"><span>育儿假</span><span class="on">地方特色假</span><span>新增</span></div></div>
+    </div>
+  </div>
+  <div class="case-label">不同行业客户的配置实践</div>
+  <div class="ind-tabs">
+    <button class="on" data-i="0">连锁门店</button>
+    <button data-i="1">制造业</button>
+    <button data-i="2">科技企业</button>
+  </div>
+  <div class="ind-panel case on">
+    <div class="c-top"><b>某连锁餐饮企业</b><span>800 人 · 90 家门店</span></div>
+    <div class="c-need">诉求：门店排班乱、小时工多、算薪靠 Excel</div>
+    <div class="c-row"><em>选配模块（只用 3 个）</em><div class="chips"><span>考勤管理</span><span>薪税代发</span><span>员工服务</span></div></div>
+    <div class="c-row"><em>配置的关键规则</em><div class="chips"><span>按门店分组排班</span><span>小时工按时薪计薪</span><span>跨店调动审批流</span></div></div>
+    <div class="c-res">3 天上线，先跑通最小闭环，后续按需加选</div>
+  </div>
+  <div class="ind-panel case">
+    <div class="c-top"><b>某离散制造企业</b><span>2,000 人 · 多产线两班倒</span></div>
+    <div class="c-need">诉求：计件工资算不清、旺季入职量大、工时合规难</div>
+    <div class="c-row"><em>选配模块</em><div class="chips"><span>考勤管理</span><span>薪税代发</span><span>企业培训</span></div></div>
+    <div class="c-row"><em>配置的关键规则</em><div class="chips"><span>综合工时管控</span><span>计件工资科目</span><span>扫码入职 + 批量开卡</span></div></div>
+    <div class="c-res">算薪从 3 天缩短到半天，用工全程留痕合规</div>
+  </div>
+  <div class="ind-panel case">
+    <div class="c-top"><b>某科创企业</b><span>150 人 · 弹性办公</span></div>
+    <div class="c-need">诉求：项目制奖金分配难、研发工时统计靠手工</div>
+    <div class="c-row"><em>选配模块</em><div class="chips"><span>薪税代发</span><span>福利关怀</span><span>企业培训</span></div></div>
+    <div class="c-row"><em>配置的关键规则</em><div class="chips"><span>项目奖金包分配</span><span>弹性打卡规则</span><span>培训学分体系</span></div></div>
+    <div class="c-res">奖金分配全线上、可追溯，员工体验明显提升</div>
+  </div>
+  <div class="voice"><p>"我们不是大公司，但也不能太随意。口袋管家能按我们的规则来配，考勤、审批、薪酬都能对上，不用削足适履。"</p><div class="who">某成长型企业 HR 总监</div></div>
+</section>
+
+<section id="sec3">
+  <div class="lv-banner t3"><span class="lb-kick">精细化管理 · 全流程线上化</span><h2>全模块启用、一体化管理、<br>掌控全局</h2></div>
+    <div class="keys"><span>全模块启用</span><span>数据全打通</span><span>管理驾驶舱实时呈现</span><span>集团化多层级</span></div>
+  <p class="lv-sub">覆盖招聘至离职的全流程线上化，多公司、多层级数据实时贯通，集团总部可实时掌握各公司人力运营全貌。</p>
+  <div class="dash">
+    <div class="dh"><b>人力管理驾驶舱</b><span>实时数据</span></div>
+    <div class="grid4">
+      <div class="metric"><div class="lab">今日出勤率</div><div class="val">96<small>%</small></div><div class="up">较上周 +1.2%</div></div>
+      <div class="metric"><div class="lab">本月人力成本</div><div class="val">¥ 862<small>万</small></div><div class="up">预算内 92%</div></div>
+      <div class="metric"><div class="lab">待审批</div><div class="val">12<small> 条</small></div><div class="up" style="color:#FFB020">2 条超时提醒</div></div>
+      <div class="metric"><div class="lab">招聘进行中</div><div class="val">8<small> 个岗位</small></div><div class="up">本周新到简历 56 份</div></div>
+    </div>
+    <div class="spark"><svg viewBox="0 0 320 70" width="100%" height="70"><polyline points="0,52 40,46 80,49 120,38 160,42 200,30 240,33 280,22 320,18" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round"/><polygon points="0,52 40,46 80,49 120,38 160,42 200,30 240,33 280,22 320,18 320,70 0,70" fill="rgba(255,106,0,.18)"/><text x="4" y="14" fill="#9AA0B0" font-size="9">近 6 个月人力成本趋势</text></svg></div>
+  </div>
+  <div class="flow">
+    <h5>全流程动线 · 从招聘到离职，一条线贯穿</h5>
+    <div class="flow-track">
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>招聘</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>入职</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>考勤</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>培训</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>绩效</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>薪酬</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>福利</p></div></div><div class="link"></div>
+      <div class="node"><div><div class="dot"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M4 3.33a1 1 0 011 1v13.76h15.07a1 1 0 110 2H5a2 2 0 01-2-2V4.33a1 1 0 011-1zm4.2 5.95a1 1 0 011 1v5.32a1 1 0 11-2 0V10.28a1 1 0 011-1zm9.02-2.43a1 1 0 011 1v7.75a1 1 0 11-2 0V7.85a1 1 0 011-1z"/></svg></div><p>离职</p></div></div>
+    </div>
+  </div>
+  <div class="voice"><p>"集团10个子公司、1400人，以前数据要层层汇总。现在一个平台，总部实时看到所有公司的编制、出勤、人力成本，决策不用等报表。"</p><div class="who">某集团企业 HRVP</div></div>
+</section>
+
+<div class="support" id="support">
+  <div class="lv-banner t2"><span class="lb-kick">底层支撑 · 灵活从哪里来</span><h2>灵活，不是口号</h2></div>
+  <p class="lead">千人千面的体验设计、组件化的功能架构、多样化的服务模式——三层支撑，让"按需适配"真正落地。</p>
+
+  <div class="sup-item">
+    <div class="sup-no"><span class="n">1</span><b>体验千人千面</b><span>管理员自由定义工作台</span></div>
+    <p class="sup-desc">签约后，管理员可在 PC 管理端自由定义「常用功能」与「场景专区」——每个企业打开口袋管家，看到的都是为自己定制的首页。</p>
+    <div class="pc">
+      <div class="pc-top"><i></i><i></i><i></i><div class="url">kdgj.pingan.com.cn · 企业管理端</div></div>
+      <div class="pc-body">
+        <div class="pc-side"><div class="mi on"></div><div class="mi"></div><div class="mi"></div><div class="mi"></div><div class="mi"></div></div>
+        <div class="pc-main">
+          <div class="pc-block"><div class="pb-h"><b>常用功能</b><span>可自定义排序</span></div>
+            <div class="pc-apps"><div><em>薪</em>薪税代发</div><div><em>考</em>考勤管理</div><div><em>入</em>极速入职</div><div><em>批</em>移动审批</div></div></div>
+          <div class="pc-block" style="margin-bottom:0"><div class="pb-h"><b>场景专区</b><span>按角色/部门配置</span></div>
+            <div class="pc-scene"><div class="s1">薪税代发<br>专区</div><div class="s2">门店排班<br>专区</div><div class="s3">员工服务<br>专区</div></div></div>
+          <div class="pc-note">示意：管理员可拖拽定义功能入口与场景专区，员工端同步生效</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sup-item">
+    <div class="sup-no"><span class="n">2</span><b>功能可选可配</b><span>从最小闭环到生态服务</span></div>
+    <p class="sup-desc">组件化架构设计，像搭积木一样选功能：先跑通最小闭环，随业务发展持续加选模块，还能开通生态服务。</p>
+    <div class="layer l1"><div class="lh"><b>第一层 · 最小管理闭环</b><i>快速启用</i></div><p>按需合理选择核心功能，最快当天上线。</p><div class="mods"><span>组织管理</span><span>极速入职</span><span>考勤管理</span><span>薪税代发</span><span>合同/离职</span></div></div>
+    <div class="layer-arrow">↓ 随发展，随时延展</div>
+    <div class="layer l2"><div class="lh"><b>第二层 · 灵活延展选配</b><i>按需加选</i></div><p>企业扩张、管理升级，随时增选新模块。</p><div class="mods"><span>招聘管理</span><span>企业培训</span><span>员工服务</span><span>福利关怀</span><span>团队管理</span><span>商旅费控</span></div></div>
+    <div class="layer-arrow">↓ 按场景，选用生态</div>
+    <div class="layer l3"><div class="lh"><b>第三层 · 生态服务</b><i>共享使用</i></div><p>甄选优质第三方服务，即开即用、按量使用。</p><div class="mods"><span>测评背调</span><span>电子合同/印章</span><span>海量课程</span><span>个税社保</span><span>体检挂号</span><span>机酒资源</span></div></div>
+  </div>
+
+  <div class="sup-item" style="margin-bottom:8px">
+    <div class="sup-no"><span class="n">3</span><b>服务模式灵活</b><span>融入你的数字化体系</span></div>
+    <p class="sup-desc">既可以整体使用，也可以嵌入你已有的系统：页面、H5、接口随你选，终端形态随你定。</p>
+    <div class="svc-modes"><div><b>整套输出</b><span>轻咨询 + 整套系统方案</span></div><div><b>模块输出</b><span>按需单模块输出</span></div><div><b>接口输出</b><span>应用与数据 API</span></div></div>
+    <div class="svc-label">三种员工终端形态</div>
+    <div class="phones">
+      <div class="ph"><div class="scr appA"><div class="sk o" style="width:60%"></div><div class="sk"></div><div class="sk"></div><div class="sk o" style="width:45%"></div><div class="sk"></div></div><b>口袋管家 App</b><span>下载即用<br>标准版功能全量开放</span></div>
+      <div class="ph"><div class="scr appB"><div class="sk o" style="width:50%"></div><div class="sk"></div><div class="sk o" style="width:70%"></div><div class="sk"></div><div class="sk"></div></div><b>嵌入你的 App</b><span>H5 嵌入已有 App<br>登录即用，体验无缝</span></div>
+      <div class="ph"><div class="scr appC"><div class="sk" style="background:rgba(255,255,255,.25)"></div><div class="sk o" style="width:55%"></div><div class="sk" style="background:rgba(255,255,255,.25)"></div><div class="sk o" style="width:40%"></div><div class="sk" style="background:rgba(255,255,255,.25)"></div></div><b>专属 App</b><span>定制你的品牌 App<br>支持本地化 / SaaS</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="quiz-sec">
+  <h2>贵企业适合哪种管理深度？</h2>
+  <p class="tip">30 秒自测，匹配适合贵企业的管理方案</p>
+  <div class="q" data-q="0"><b>1. 公司人数</b><div class="opts"><button data-v="0">20人以下</button><button data-v="1">20-200人</button><button data-v="2">200人以上</button></div></div>
+  <div class="q" data-q="1"><b>2. 当前考勤方式</b><div class="opts"><button data-v="0">不打卡</button><button data-v="1">Excel记录</button><button data-v="2">已有系统</button></div></div>
+  <div class="q" data-q="2"><b>3. 薪酬复杂度</b><div class="opts"><button data-v="0">固定工资</button><button data-v="1">绩效/提成</button><button data-v="2">多套薪酬方案</button></div></div>
+  <div class="quiz-result" id="result" style="display:none"><div class="rl">根据你的选择，推荐方案</div><div class="rv" id="rvLevel"></div><p id="rvDesc"></p><a href="#" id="rvLink" style="display:inline-block;background:var(--pa-orange);color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 34px;border-radius:24px">查看对应方案详情</a></div>
+</div>
+
+<a class="cta-all">立即体验平安口袋管家</a>
+<div class="foot">平安口袋管家 · 以"数智化人力资源管理"为核心的企业"人、财、事"一体化开放平台<br>© 平安银行版权所有</div>
+
+
+<script>
+(function(){
+  /* 页签滚动 */
+  document.querySelectorAll('#nav button').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('#nav button').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      document.querySelector(b.dataset.t).scrollIntoView({behavior:'smooth'});
+    };
+  });
+  /* 行业切换 */
+  var tabs=document.querySelectorAll('.ind-tabs button'),panels=document.querySelectorAll('.ind-panel');
+  tabs.forEach(function(t){
+    t.onclick=function(){
+      tabs.forEach(function(x){x.classList.remove('on')});
+      panels.forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on');panels[+t.dataset.i].classList.add('on');
+    };
+  });
+  /* 自测 */
+  var answers=[-1,-1,-1];
+  var levels=[
+    {name:'轻量化管理 · 即开即用',desc:'从一键发薪、电子合同、扫码入职、免费课程开始：导入花名册即可使用，零配置、零门槛，快速上手。',target:'#sec1'},
+    {name:'差异化管理 · 按需配置',desc:'按你的行业和管理规则开通模块，考勤、审批、薪酬灵活可配，形成自己的管理闭环。',target:'#sec2'},
+    {name:'精细化管理 · 一体化平台',desc:'全模块启用、全流程线上化，数据实时打通，驾驶舱一屏掌控集团人力全局。',target:'#sec3'}
+  ];
+  document.querySelectorAll('.q').forEach(function(q){
+    q.querySelectorAll('button').forEach(function(btn){
+      btn.onclick=function(){
+        q.querySelectorAll('button').forEach(function(x){x.classList.remove('sel')});
+        btn.classList.add('sel');
+        answers[+q.dataset.q]=+btn.dataset.v;
+        if(answers.every(function(a){return a>=0})){
+          var sum=answers.reduce(function(a,b){return a+b},0);
+          var idx=sum<=2?0:(sum<=4?1:2);
+          var r=document.getElementById('result');
+          document.getElementById('rvLevel').textContent=levels[idx].name;
+          document.getElementById('rvDesc').textContent=levels[idx].desc;
+          document.getElementById('rvLink').onclick=function(){
+            document.querySelector(levels[idx].target).scrollIntoView({behavior:'smooth'});return false;
+          };
+          r.classList.add('on');
+          r.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+      };
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
